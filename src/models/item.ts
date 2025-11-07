@@ -6,3 +6,10 @@ export interface Item {
 }
 
 export const items: Item[] = [];
+
+export interface Users {
+    id: number;
+    password: string & { length: 10 };
+    role: 'Customer' | 'Agent' | 'Store' | 'Admin';
+}
+
