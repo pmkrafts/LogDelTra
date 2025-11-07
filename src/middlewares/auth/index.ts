@@ -12,9 +12,13 @@ const authenticate = async (req: Request, res: Response, next: NextFunction) => 
         return res.status(401).json({ message: 'Authentication required' });
     }
 
+    console.log('token', token)
+    console.log('secret', config.secretKey)
+
     try {
-        const decodedToken = jwt.verify(token, config.secretKey);
-        const user = await User.findById(decodedToken);
+        const decodedToken = jwt.verify(token, config.secretKey) as { userId: string };
+        const user = await User.findById(decodedToken.userId);
+        console.log('user')
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -22,6 +26,7 @@ const authenticate = async (req: Request, res: Response, next: NextFunction) => 
         // req.user = user;
         next();
     } catch (error) {
+        console.log('auth error', error)
         res.status(401).json({ message: 'Invalid token' });
     }
 };

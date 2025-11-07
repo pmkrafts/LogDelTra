@@ -1,12 +1,35 @@
 import Order from '../../models/order.ts';
 import type { Request, Response, NextFunction } from 'express';
+import { getUserId } from '../../services/user/getUserId.ts';
 
 
-// Create a new order
+/**
+ * Creates a new order
+ * @param req.body.emailId - Customer's email (e.g., "customer@example.com")
+ * @param req.body.items - Array of order items (e.g., [{ productId: "123", quantity: 2 }])
+ * @param req.body.dropAddressNo - Delivery address ID (e.g., "addr123")
+ * @returns JSON response with message
+ * 
+ * @example
+ * POST /orders
+ * {
+ *   "emailId": "customer@example.com",
+ *   "items": [{ "productId": "123", "quantity": 2 }],
+ *   "dropAddressNo": "addr123"
+ * }
+ */
 const createOrder = async (req: Request, res: Response, next: NextFunction) => {
-    const { customerId, items, dropAddressNo } = req.body;
+    console.log('Creating order with:', req.body);
+    const { emailId, items, dropAddressNo } = req.body;
 
     try {
+        const customerId = await getUserId(emailId);
+        console.log('customerId is', customerId);
+
+        if (!customerId) {
+            return res.status(404).json({ message: 'Customer not found' });
+        }
+
         const order = new Order({ customerId, items, dropAddressNo });
         await order.save();
         res.json({ message: 'Order placed' });
@@ -15,7 +38,19 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-// update an existing order
+/**
+ * Updates an existing order
+ * @param req.body.orderId - Order ID to update (e.g., "order123")
+ * @param req.body.updates - Object containing fields to update (e.g., { status: "shipped" })
+ * @returns JSON response with message
+ * 
+ * @example
+ * PUT /orders
+ * {
+ *   "orderId": "order123",
+ *   "updates": { "status": "shipped" }
+ * }
+ */
 const updateOrder = async (req: Request, res: Response, next: NextFunction) => {
     const { orderId, updates } = req.body;
 

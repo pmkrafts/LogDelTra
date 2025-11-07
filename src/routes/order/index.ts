@@ -1,10 +1,10 @@
 import express from 'express';
-import { authenticate } from '../../middlewares/auth/auth.ts';
+import { authenticate } from '../../middlewares/auth/index.ts';
 import { createOrder } from '../../controllers/order/index.ts';
 
 
 const router = express.Router();
 
-router.put('/order', authenticate, createOrder);
+router.post('/create', authenticate, createOrder);
 
 export default router;

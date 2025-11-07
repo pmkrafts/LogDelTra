@@ -1,5 +1,5 @@
 import express from 'express';
-import { authenticate } from '../../middlewares/auth/auth.ts';
+import { authenticate } from '../../middlewares/auth/index.ts';
 import type { Request, Response } from 'express';
 
 

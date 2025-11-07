@@ -1,15 +1,15 @@
 import express from 'express';
-import itemRoutes from './routes/itemRoutes.ts';
 import { errorHandler } from './middlewares/errorHandler.ts';
 import connectDB from './config/database.ts'
-import authRoutes from './routes/auth/auth.ts';
-import userRoutes from './routes/user/user.ts';
-import orderRoutes from './routes/order/order.ts';
+
+// routes
+import itemRoutes from './routes/itemRoute.ts';
+import authRoutes from './routes/auth/index.ts';
+import userRoutes from './routes/user/index.ts';
+import orderRoutes from './routes/order/index.ts';
 
 
 const app = express();
-
-app.use(express.json());
 
 // Connect to MongoDB
 connectDB();
