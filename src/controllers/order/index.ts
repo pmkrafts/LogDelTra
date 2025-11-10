@@ -8,8 +8,10 @@ import { getUserId } from '../../services/user/getUserId.ts';
  * @param req.body.emailId - Customer's email (e.g., "customer@example.com")
  * @param req.body.items - Array of order items (e.g., [{ productId: "123", quantity: 2 }])
  * @param req.body.dropAddressNo - Delivery address ID (e.g., "addr123")
+ * @param res - Express Response object
+ * @param next - Express NextFunction for error handling
  * @returns JSON response with message
- * 
+ * @throws Forwards any errors to next() middleware
  * @example
  * POST /orders
  * {
@@ -19,12 +21,12 @@ import { getUserId } from '../../services/user/getUserId.ts';
  * }
  */
 const createOrder = async (req: Request, res: Response, next: NextFunction) => {
-    console.log('Creating order with:', req.body);
+    // console.log('Creating order with:', req.body);
     const { emailId, items, dropAddressNo } = req.body;
 
     try {
         const customerId = await getUserId(emailId);
-        console.log('customerId is', customerId);
+        // console.log('customerId is', customerId);
 
         if (!customerId) {
             return res.status(404).json({ message: 'Customer not found' });
@@ -42,8 +44,10 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
  * Updates an existing order
  * @param req.body.orderId - Order ID to update (e.g., "order123")
  * @param req.body.updates - Object containing fields to update (e.g., { status: "shipped" })
+ * @param res - Express Response object
+ * @param next - Express NextFunction for error handling
  * @returns JSON response with message
- * 
+ * @throws Forwards any errors to next() middleware
  * @example
  * PUT /orders
  * {
